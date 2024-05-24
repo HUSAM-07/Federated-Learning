@@ -89,22 +89,20 @@ def main():
         st.sidebar.header("Visualization Settings")
         classifier_type = st.sidebar.selectbox("Select Classifier", ["7 Class Classifier", "33 Class Classifier"])
         num_clients = st.sidebar.selectbox("Number of Clients", [5, 10, 15])
+
+        # Update data based on classifier type
+        data_classifier = data[classifier_type]
         
-        if classifier_type == "7 Class Classifier":
-            data_classifier = data[classifier_type]
-            if num_clients not in data_classifier["clients"]:
-                st.error(f"Data for {num_clients} clients is not available for the {classifier_type}. Please select another number of clients.")
-                return
+        if num_clients not in data_classifier["clients"]:
+            st.error(f"Data for {num_clients} clients is not available for the {classifier_type}. Please select another number of clients.")
         else:
-            data_classifier = data[classifier_type]
-        
-        fig = plot_metrics(
-            classifier_type,
-            data_classifier["clients"],
-            data_classifier["accuracy"],
-            data_classifier["loss"]
-        )
-        st.plotly_chart(fig)
+            fig = plot_metrics(
+                classifier_type,
+                data_classifier["clients"],
+                data_classifier["accuracy"],
+                data_classifier["loss"]
+            )
+            st.plotly_chart(fig)
 
     elif menu == "Federated Learning Info":
         st.header("Federated Learning")
@@ -112,7 +110,7 @@ def main():
         Federated learning is a machine learning technique that trains an algorithm across multiple decentralized devices or servers holding local data samples, without exchanging them. 
         This approach contrasts with traditional centralized machine learning techniques where all local datasets are uploaded to one server, as well as more classical decentralized approaches which often assume that local data samples are identically distributed.
         """)
-        
+
         st.subheader("7 Class Classifier Labels")
         display_labels(labels_7)
 
