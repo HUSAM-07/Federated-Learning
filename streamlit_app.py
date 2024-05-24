@@ -3,7 +3,6 @@ import plotly.graph_objects as go
 
 # Title for the app
 st.title("Federated Learning Dashboard")
-st.set_page_config(page_icon="🚦")
 
 # Data for 33 Class Classifier
 clients_33 = [5, 10, 15]
