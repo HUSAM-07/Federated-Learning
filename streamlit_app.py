@@ -1,6 +1,8 @@
 import streamlit as st
 import plotly.graph_objects as go
 
+st.set_page_config(page_icon="🚦")
+
 # Data for the classifiers
 clients_33 = [5, 10, 15]
 accuracy_33 = [0.97, 0.955, 0.85]
