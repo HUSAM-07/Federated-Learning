@@ -84,8 +84,7 @@ def main():
     st.title("Federated Learning Classifier Dashboard")
     st.set_page_config(page_icon="🚦",initial_sidebar_state="expanded",page_title="Federated Learning for IoT")
 
-    st.markdown(""">Made by Mohammed Husamuddin
-                *Mentor: Dr. Pranav M Pawar""")
+    st.markdown(""">Made by Mohammed Husamuddin | Mentor: Dr. Pranav M Pawar""")
 
 
     menu = st.sidebar.selectbox("Choose a page", ["Visualization", "Federated Learning Info"])
