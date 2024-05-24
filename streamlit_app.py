@@ -1,6 +1,10 @@
 import streamlit as st
 import plotly.graph_objects as go
 
+st.set_page_config(page_icon="🚦",initial_sidebar_state="expanded",page_title="Federated Learning for IoT")
+
+st.markdown(""">Made by Mohammed Husamuddin | Mentor: Dr. Pranav M Pawar""")
+
 # Data for the classifiers
 data = {
     "33 Class Classifier": {
@@ -82,9 +86,6 @@ def display_labels(labels):
 
 def main():
     st.title("Federated Learning Classifier Dashboard")
-    st.set_page_config(page_icon="🚦",initial_sidebar_state="expanded",page_title="Federated Learning for IoT")
-
-    st.markdown(""">Made by Mohammed Husamuddin | Mentor: Dr. Pranav M Pawar""")
 
 
     menu = st.sidebar.selectbox("Choose a page", ["Visualization", "Federated Learning Info"])
