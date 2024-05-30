@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.graph_objects as go
+import time
 
 # Set page configuration
 st.set_page_config(page_icon="🚦", initial_sidebar_state="expanded", page_title="Federated Learning for IoT")
@@ -89,7 +90,7 @@ def display_labels(labels):
 def main():
     st.title("Federated Learning Classifier Dashboard")
 
-    menu = st.sidebar.selectbox("Choose a page", ["Visualization", "Federated Learning Info"])
+    menu = st.sidebar.selectbox("Choose a page", ["Visualization", "Federated Learning Info", "FL Process Visualization"])
 
     if menu == "Visualization":
         st.sidebar.header("Visualization Settings")
@@ -122,6 +123,94 @@ def main():
 
         st.subheader("33 Class Classifier Labels")
         display_labels(labels_33)
+
+    elif menu == "FL Process Visulaization":
+
+        # Define the layout and elements of the diagram
+        st.title("Federated Learning System Visualization")
+
+        col1, col2, col3 = st.columns([1, 1, 1])
+
+        with col1:
+            st.header("Strategy")
+            configure_train_eval = st.empty()
+            configure_train_eval.code("Configure\ntrain/eval", language="python")
+
+        with col2:
+            st.header(" ")
+            global_model = st.empty()
+            global_model.code("Global\nModel", language="python")
+
+        with col3:
+            st.header(" ")
+            configure_train_eval_2 = st.empty()
+            configure_train_eval_2.code("Configure\ntrain/eval", language="python")
+
+        # Create placeholders for dynamic elements
+        client_manager = st.empty()
+        rpc_server = st.empty()
+
+        # Function to draw arrows
+        def draw_arrow(container, start_col, end_col, color="blue", text=""):
+            with container:
+                if start_col < end_col:
+                    st.markdown(f"<div style='text-align: center;'><span style='font-size:24px; color:{color};'>→ {text}</span></div>", unsafe_allow_html=True)
+                else:
+                    st.markdown(f"<div style='text-align: center;'><span style='font-size:24px; color:{color};'>{text} ←</span></div>", unsafe_allow_html=True)
+
+
+        # Function to visualize a client
+        def visualize_client(container, client_type, client_status="active"):
+            with container:
+                st.code(f"{client_type.upper()}\nClient\nProxy", language="python")
+                if client_type == "edge":
+                    st.code("RPC Client\n\nTraining\nPipeline\n\nData\n\nEdge Client", language="python")
+                else:
+                    status_text = "(inactive)" if client_status == "inactive" else "(active)"
+                    st.code(
+                        f"Training\nPipeline\n\nData\n\nVirtual\nClient\n{status_text}",
+                        language="python",
+                    )
+
+
+        # Draw the initial state of the system
+        client_manager.header("Client\nManager")
+        rpc_server.header("RPC\nServer")
+        col1, col2, col3 = st.columns([1, 1, 1])
+        visualize_client(col1, "edge")
+        visualize_client(col2, "virtual", client_status="inactive")
+        visualize_client(col3, "virtual")
+        draw_arrow(st.container(), 1, 2, color="green", text="Model Update")
+        draw_arrow(st.container(), 2, 3, color="green")
+        draw_arrow(st.container(), 3, 2, color="blue", text="Aggregated Updates")
+        draw_arrow(st.container(), 2, 1, color="blue")
+
+        # Simulate the federated learning process
+        for i in range(3):
+            # Step 1: Send model to clients
+            with st.spinner(f"Iteration {i+1}: Sending global model to clients..."):
+                time.sleep(1)
+            draw_arrow(st.container(), 1, 2, color="green", text="Model Update")
+            draw_arrow(st.container(), 2, 3, color="green")
+            time.sleep(1)
+
+            # Step 2: Clients train locally
+            with st.spinner("Clients training locally..."):
+                time.sleep(2)
+
+            # Step 3: Send updates back to server
+            with st.spinner("Sending local updates to server..."):
+                time.sleep(1)
+            draw_arrow(st.container(), 3, 2, color="blue", text="Aggregated Updates")
+            draw_arrow(st.container(), 2, 1, color="blue")
+            time.sleep(1)
+
+            # Step 4: Server aggregates updates
+            with st.spinner("Server aggregating updates..."):
+                time.sleep(1)
+
+        # Display final results
+        st.success("Federated Learning process complete!")
 
 if __name__ == "__main__":
     main()
